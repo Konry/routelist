@@ -67,7 +67,7 @@ public class ConfigurationManager {
 		Properties defaultProperties = new Properties();
 		FileOutputStream out = new FileOutputStream("config.cfg");
 		
-		defaultProperties.setProperty("version", "0.0.0.1");
+		defaultProperties.setProperty("version", "0.1");
 		defaultProperties.setProperty("default_location", "53.872000, 10.677874");
 		defaultProperties.setProperty("language", "de");
 		defaultProperties.setProperty("storage_path", "");
