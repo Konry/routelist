@@ -75,7 +75,7 @@ public class ConfigurationManager {
 		defaultProperties.setProperty("google_api_code", "TODO insert");
 		
 		defaultProperties.store(out, "This is the configuration file for the Application FFRouteList.\n"
-				+ "- The shall not be modified, because it changes the stucture of the config file\n"
+				+ "- The version number shall not be modified, because it changes the stucture of the config file\n"
 				+ "- The default location can be set to every street or google acceptable address, decimal geo informations\n"
 				+ "- The language is also for the return language of the google api\n"
 				+ "- At the storage path the route list is saved.\n\n");
