@@ -2,12 +2,12 @@
 <project default="create_run_jar" name="Create Runnable Jar for Project FFRouteList with Jar-in-Jar Loader">
     <!--this file was created by Eclipse Runnable JAR file Export Wizard-->
     <!--ANT 1.7 is required-->
-    <!--define folder properties-->
-    <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    
+    <!--define folder properties--><property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."></property>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/FFRouteList.jar">
+        <jar destfile="${dir.jarfile}/FFRouteList.jar" includes="gson-2.3.1.jar">
             <manifest>
                 <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
                 <attribute name="Rsrc-Main-Class" value="RouteListMain"/>
@@ -18,7 +18,7 @@
             <fileset dir="${dir.jarfile}/bin"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="google-maps-services-0.1.9.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="okhttp-2.0.0.jar"/>
-            <zipfileset dir="${dir.jarfile}/libs" includes="gson-2.3.1.jar"/>
+            <zipfileset dir="${dir.jarfile}/libs"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="okio-1.0.0.jar"/>
             <zipfileset dir="${dir.jarfile}/libs" includes="joda-time-2.4.jar"/>
         </jar>

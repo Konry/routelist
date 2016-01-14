@@ -13,4 +13,3 @@ hs_err_pid*
 config.cfg
 *.html
 *.cfg
-jar-in-jar-loader.zip
