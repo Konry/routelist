@@ -100,8 +100,8 @@ public class ConfigurationManager {
 		Properties newPropertiesFile = generateDefaultPropertiesObject();
 		Iterator<Entry<Object, Object>> it = config.entrySet().iterator();
 		while (it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			System.out.println(pair.getKey() + " = " + pair.getValue());
+			Entry<Object, Object> pair = it.next();
+			//System.out.println(pair.getKey() + " = " + pair.getValue());
 
 			/* special rename handling... */
 			if (!pair.getKey().toString().equals("version")) {
