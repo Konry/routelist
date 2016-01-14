@@ -13,11 +13,12 @@ import com.google.maps.model.DirectionsStep;
 
 public class DirectionParser {
 	private static final Pattern REMOVE_TAGS = Pattern.compile("<.+?>");
+	private static boolean DEBUG_MODE = false;
 	ConfigurationManager cm = null;
 
 	/**
 	 * The direction parser will first remove the file, then reads the route and
-	 * afterwards processes the string into a route list. Which are the streets 
+	 * afterwards processes the string into a route list. Which are the streets
 	 * with the distances to drive on.
 	 * 
 	 * @param locationToGetTo
@@ -26,6 +27,9 @@ public class DirectionParser {
 	 */
 	public DirectionParser(String locationToGetTo, ConfigurationManager cm) throws IOException {
 		this.cm = cm;
+		if (cm.configuration.getProperty("debug_mode").contains("true")) {
+			DEBUG_MODE = true;
+		}
 		removeHtmlFile();
 		DirectionsRoute[] routes = getRouteList(locationToGetTo);
 		String routList = parseRouteStepsIntoString(routes);
@@ -59,16 +63,64 @@ public class DirectionParser {
 		// System.out.println("size of routes " + routes.length);
 		// System.out.println("size of legs " + routes[0].legs.length);
 		StringBuilder sb = new StringBuilder();
-//		int count = routes[0].legs[0].steps.length;
+		int count = routes[0].legs[0].steps.length;
 		for (DirectionsStep step : routes[0].legs[0].steps) {
-			System.out.println(removeTags(step.htmlInstructions));
-			sb.append(removeTags(step.htmlInstructions));
-			sb.append("<br>");
-			sb.append(step.distance);
-			sb.append("<br>");
-//			if (--count > 0) {
-				// sb.append("<br>");
-//			}
+			if (count == routes[0].legs[0].steps.length) {
+				String direction = null;
+				String onStreet = null;
+				String[] split = null;
+				if (step.htmlInstructions.contains("Richtung ")) {
+					split = step.htmlInstructions.split("Richtung ");
+				} else if (step.htmlInstructions.contains("direction ")) {
+					split = step.htmlInstructions.split("direction ");
+				}
+				if (split.length > 1) {
+					int indexStart = split[1].indexOf("<b>") + 3;
+					int indexEnd = split[1].indexOf("</b>");
+					direction = split[1].substring(indexStart, indexEnd);
+
+					indexStart = split[0].indexOf("<b>") + 3;
+					indexEnd = split[0].indexOf("</b>");
+					onStreet = split[0].substring(indexStart, indexEnd);
+					if (DEBUG_MODE) {
+						System.out.print("Auf " + onStreet);
+						System.out.print(" in Richtung " + direction);
+						System.out.println(" (" + step.distance + ")");
+					}
+				}
+				sb.append("Richtung " + direction);
+				sb.append(" (");
+				sb.append(step.distance);
+				sb.append(")<br>");
+			} else if (count == 1) {
+				String[] split = step.htmlInstructions.split("<div style=");
+				String target = split[1].replace("\"font-size:0.9em\">", "");
+				target = target.replace("</div>", "");
+
+				if (DEBUG_MODE) {
+					System.out.print(removeTags(split[0]) + ".");
+					System.out.println(" (" + step.distance + ")");
+					System.out.println(target);
+				}
+				sb.append(removeTags(split[0]));
+				sb.append(" (");
+				sb.append(step.distance);
+				sb.append(")");
+				sb.append("<div style=\"font-size:0.9em\">" + target + "</div>");
+			} else if (count < routes[0].legs[0].steps.length) {
+				if (DEBUG_MODE) {
+					System.out.print(removeTags(step.htmlInstructions) + ".");
+					System.out.println(" (" + step.distance + ")");
+				}
+				sb.append(removeTags(step.htmlInstructions));
+				sb.append(" (");
+				sb.append(step.distance);
+				sb.append(")<br>");
+				if (count == 0) {
+					sb.append("<br>");
+				}
+			}
+			--count;
 		}
 		return sb.toString();
 	}
@@ -107,7 +159,7 @@ public class DirectionParser {
 			file = new File(storagePath + java.io.File.separator + storageFilename);
 		}
 		File path = new File(storagePath);
-		if(!path.exists() || !path.isDirectory()){
+		if (!path.exists() || !path.isDirectory()) {
 			path.mkdirs();
 		}
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file));

@@ -13,6 +13,8 @@ public class RouteListMain {
 				}
 				new DirectionParser(sb.toString(), configmanager);
 				
+			}else {
+				System.out.println("Es ist keine Eingabe vorhanden.");
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
