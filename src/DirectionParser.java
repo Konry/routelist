@@ -94,19 +94,26 @@ public class DirectionParser {
 				sb.append(")<br>");
 			} else if (count == 1) {
 				String[] split = step.htmlInstructions.split("<div style=");
-				String target = split[1].replace("\"font-size:0.9em\">", "");
-				target = target.replace("</div>", "");
-
-				if (DEBUG_MODE) {
-					System.out.print(removeTags(split[0]) + ".");
-					System.out.println(" (" + step.distance + ")");
-					System.out.println(target);
-				}
 				sb.append(removeTags(split[0]));
 				sb.append(" (");
 				sb.append(step.distance);
 				sb.append(")");
-				sb.append("<div style=\"font-size:0.9em\">" + target + "</div>");
+				if (DEBUG_MODE) {
+					System.out.print(removeTags(split[0]) + ".");
+					System.out.println(" (" + step.distance + ")");
+				}
+				if (split.length > 1) {
+					String target = split[1].replace("\"font-size:0.9em\">", "");
+					target = target.replace("</div>", "");
+
+					if (DEBUG_MODE) {
+						System.out.println(target);
+					}
+
+					sb.append("<div style=\"font-size:0.9em\">" + target + "</div>");
+				} else {
+					
+				}
 			} else if (count < routes[0].legs[0].steps.length) {
 				if (DEBUG_MODE) {
 					System.out.print(removeTags(step.htmlInstructions) + ".");

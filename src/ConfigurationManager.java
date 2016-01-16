@@ -22,7 +22,7 @@ public class ConfigurationManager {
 			+ "- The language is also for the return language of the google api\n"
 			+ "- At the storage path the route list is saved.\n\n";
 
-	private final String versionString = "0.1.1";
+	private final String versionString = "0.1.2";
 
 	public Properties configuration = null;
 
