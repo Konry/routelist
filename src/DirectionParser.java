@@ -31,10 +31,16 @@ public class DirectionParser {
 			DEBUG_MODE = true;
 		}
 		removeHtmlFile();
-		DirectionsRoute[] routes = getRouteList(locationToGetTo);
-		String routList = parseRouteStepsIntoString(routes);
-		String htmlText = buildHTMLFile(routList);
-		saveHtmlFile(htmlText);
+		DirectionsRoute[] routes;
+		try {
+			routes = getRouteList(locationToGetTo);
+			String routList = parseRouteStepsIntoString(routes);
+			String htmlText = buildHTMLFile(routList);
+			saveHtmlFile(htmlText);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.err.println(e.getMessage());
+		}
 	}
 
 	/**
@@ -42,14 +48,16 @@ public class DirectionParser {
 	 * 
 	 * @param location
 	 * @return
+	 * @throws Exception 
 	 */
-	private DirectionsRoute[] getRouteList(String location) {
+	private DirectionsRoute[] getRouteList(String location) throws Exception {
 		GeoApiContext context = new GeoApiContext().setApiKey(cm.configuration.getProperty("google_api_code"));
 
 		DirectionsApiRequest request = DirectionsApi.getDirections(context,
 				cm.configuration.getProperty("default_location"), location);
 		request.language(cm.configuration.getProperty("language"));
-		DirectionsRoute[] routes = request.awaitIgnoreError();
+		DirectionsRoute[] routes = request.await();
+		//DirectionsRoute[] routes = request.awaitIgnoreError();
 		return routes;
 	}
 
